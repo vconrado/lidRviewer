@@ -1,13 +1,8 @@
-.R.home.bin <- function(arch) {
-  bin <- R.home('bin')
-  if (arch == "i386") bin <- normalizePath(paste0(bin, "/../i386/"))
-  return(bin)
-}
 
 .install.dll <- function(arch = c("x64", "i386")) {
   arch <- match.arg(arch)
   temp <- tempdir()
-  bin  <- .R.home.bin(arch)
+  bin  <-  R.home('bin')
   ddl  <- paste0(temp, '/sdldll.zip')
   dll  <- paste0(temp, '/SDL.dll')
 
@@ -19,7 +14,7 @@
   url <- if (arch == "x64") {
     'https://www.libsdl.org/release/SDL-1.2.15-win32-x64.zip'
   } else {
-    'https://www.libsdl.org/release/SDL-1.2.15-win32.zip'
+    stop("This script is designed only for x64 platforms., call. = FALSE)
   }
 
   download.file(url, ddl, quiet = TRUE)
@@ -78,10 +73,7 @@ install.sdl <- function() {
   s1 <- .install.headers()
   cat("Downloading and installing SDL dll (x64)...\n")
   s2 <- .install.dll("x64")
-  cat("Downloading and installing SDL dll (i386)...\n")
-  s3 <- .install.dll("i386")
-
-  if (s1 + s2 + s3 < 3)
+  if (s1 + s2 < 2)
     stop("Something went wrong during the installation.", call. = FALSE)
   else
     cat("Installation of the SDL library: ok")
